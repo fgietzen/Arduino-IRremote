@@ -123,7 +123,11 @@ int MATCH_SPACE(int measured_ticks, int desired_us) {
 // As soon as first MARK arrives:
 //   Gap width is recorded; Ready is cleared; New logging starts
 //
-ISR (TIMER_INTR_NAME) {
+#ifdef IR_TIMER_USE_ESP32
+    void IRAM_ATTR IRTimer() {
+#else
+    ISR (TIMER_INTR_NAME) {
+#endif
     TIMER_RESET;
 
     // Read if IR Receiver -> SPACE [xmt LED off] or a MARK [xmt LED on]
@@ -135,9 +139,7 @@ ISR (TIMER_INTR_NAME) {
         irparams.rcvstate = IR_REC_STATE_OVERFLOW;  // Buffer overflow
     }
 
-    switch (irparams.rcvstate) {
-    //......................................................................
-    case IR_REC_STATE_IDLE: // In the middle of a gap
+    if (irparams.rcvstate == IR_REC_STATE_IDLE) { // In the middle of a gap
         if (irdata == MARK) {
             if (irparams.timer < GAP_TICKS) {  // Not big enough to be a gap.
                 irparams.timer = 0;
@@ -150,17 +152,13 @@ ISR (TIMER_INTR_NAME) {
                 irparams.rcvstate = IR_REC_STATE_MARK;
             }
         }
-        break;
-        //......................................................................
-    case IR_REC_STATE_MARK:  // Timing Mark
+    } else if (irparams.rcvstate == IR_REC_STATE_MARK) {  // Timing Mark
         if (irdata == SPACE) {   // Mark ended; Record time
             irparams.rawbuf[irparams.rawlen++] = irparams.timer;
             irparams.timer = 0;
             irparams.rcvstate = IR_REC_STATE_SPACE;
         }
-        break;
-        //......................................................................
-    case IR_REC_STATE_SPACE:  // Timing Space
+    } else if (irparams.rcvstate == IR_REC_STATE_SPACE) {  // Timing Space
         if (irdata == MARK) {  // Space just ended; Record time
             irparams.rawbuf[irparams.rawlen++] = irparams.timer;
             irparams.timer = 0;
@@ -173,18 +171,13 @@ ISR (TIMER_INTR_NAME) {
             // Don't reset timer; keep counting Space width
             irparams.rcvstate = IR_REC_STATE_STOP;
         }
-        break;
-        //......................................................................
-    case IR_REC_STATE_STOP:  // Waiting; Measuring Gap
+    } else if (irparams.rcvstate == IR_REC_STATE_STOP) {  // Waiting; Measuring Gap
         if (irdata == MARK) {
             irparams.timer = 0;  // Reset gap timer
         }
-        break;
-        //......................................................................
-    case IR_REC_STATE_OVERFLOW:  // Flag up a read overflow; Stop the State Machine
+    } else if(irparams.rcvstate == IR_REC_STATE_OVERFLOW) {  // Flag up a read overflow; Stop the State Machine
         irparams.overflow = true;
         irparams.rcvstate = IR_REC_STATE_STOP;
-        break;
     }
 
 #ifdef BLINKLED
