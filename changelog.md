@@ -1,3 +1,9 @@
+## 2.5.0 2020/07
+- Added support for MagiQuest IR wands.
+- Corrected Samsung timing.
+- NEC repeat implemantation.
+- Formatting and changing TIMER_CONFIG_KHZ and TIMER_CONFIG_NORMAL macros to static functions.
+
 ## 2.5.0 2020/06
 - corrected keywords.txt.
 - BoseWave protocol added PR #690.

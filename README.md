@@ -22,7 +22,7 @@ Whether you use the Adafruit Neopixel lib, or FastLED, interrupts get disabled o
 - You can use **multiple IR receiver** by just connecting the output pins of several IR receivers together. The IR receivers use an NPN transistor as output device with just a 30k resistor to VCC. This is almost "open collector" and allows connecting of several output pins.
 
 # Supported IR Protocols
-Aiwa, BoseWave, Denon, Dish, JVC, Lego, LG, Mitsubishi, Panasonic, RC5, RC6, Samsung, Sanyo, Sharp, Sony, Whynter.
+Aiwa, BoseWave, Denon, Dish, JVC, Lego, LG, MagiQuest, Mitsubishi, Panasonic, RC5, RC6, Samsung, Sanyo, Sharp, Sony, Whynter, (Pronto).
 
 ## Handling unknown Protocols
 ### Disclaimer
@@ -42,7 +42,7 @@ If you do not know which protocol your IR transmitter uses, you have several cho
 - ATmega8, 48, 88, 168, 328
 - ATmega8535, 16, 32, 164, 324, 644, 1284,
 - ATmega64, 128
-- ATtiny 84 / 85
+- ATtiny84, 85
 - SAMD21 (receive only)
 - ESP32
 - ESP8266 is supported in a fork based on an old codebase that isn't as recent, but it works reasonably well given that perfectly timed sub millisecond interrupts are different on that chip. See https://github.com/markszabo/IRremoteESP8266
@@ -62,7 +62,8 @@ The timer and the pin usage can be adjusted in [IRremoteBoardDefs.h](src/private
 | [ATmega1284](https://github.com/MCUdude/MightyCore)                      | 13, 14, 6           | 1, **2**, 3       |
 | [ATmega164, ATmega324, ATmega644](https://github.com/MCUdude/MightyCore) | 13, **14**          | 1, **2**          |
 | [ATmega8535 ATmega16, ATmega32](https://github.com/MCUdude/MightyCore)   | **13**              | **1**             |
-| [ATmega64, ATmega128](https://github.com/MCUdude/MegaCore)               | **13**              | **1**             |
+| [ATmega64, ATmega128, ATmega1281, ATmega2561](https://github.com/MCUdude/MegaCore) | **13**              | **1**             |
+| [ATmega8515, ATmega162](https://github.com/MCUdude/MajorCore)            | **13**              | **1**             |
 | ATmega1280, ATmega2560                                                   | 5, 6, **9**, 11, 46 | 1, **2**, 3, 4, 5 |
 | Leonardo (Atmega32u4)                                                    | 5, **9**, 13        | 1, 3, **4_HS**    |
 | [ESP32](http://esp32.net/)                                               | **4**, all pins     | **1**             |
@@ -75,6 +76,9 @@ The timer and the pin usage can be adjusted in [IRremoteBoardDefs.h](src/private
 
 ## Usage
 - TODO (Check examples for now)
+
+## Revision History
+Please see [changelog.md](https://github.com/z3t0/Arduino-IRremote/blob/master/changelog.md).
 
 ## API documentation
 This project documents the library API using [Doxygen](http://www.doxygen.org).
